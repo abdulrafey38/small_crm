@@ -18,7 +18,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-
+        
     }
 
     /**
