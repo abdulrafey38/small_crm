@@ -23,7 +23,8 @@ Route::get('pdf','api\QuoteController@responseSend');
 Route::post('login', 'api\ApiController@login');
 Route::resource('quote','api\QuoteController');
 Route::resource('service', 'api\ServiceController');
-
+Route::resource('customer', 'api\CustomerController');
+Route::get('client', 'api\CustomerController@getAllClients');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
 
