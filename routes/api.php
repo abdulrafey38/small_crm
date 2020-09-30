@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/pdf','api\QuoteController@responseSend');
+Route::get('pdf','api\QuoteController@responseSend');
 
 
 Route::post('login', 'api\ApiController@login');
-Route::resource('/quote','api\QuoteController');
-Route::resource('/service', 'api\ServiceController');
+Route::resource('quote','api\QuoteController');
+Route::resource('service', 'api\ServiceController');
 
 
 Route::group(['middleware' => 'auth.jwt'], function () {

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\api;
-
+use App\Http\Controllers\Controller;
 use App\Customer;
 use App\Http\Resources\Quote as QuoteResource;
 use App\Quote;
