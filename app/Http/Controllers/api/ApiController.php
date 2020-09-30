@@ -105,15 +105,4 @@ class ApiController extends Controller
         }
     }
 
-//not used
-    // public function isTokenValid() {
-    // $token =JWTAuth::getToken();
-    // if(JWTAuth::check()){
-    //     return "true2";
-    // }
-    // else {
-    //     return "false2";
-    // }
-    // }
-
 }

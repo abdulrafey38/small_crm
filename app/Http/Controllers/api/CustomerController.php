@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\api;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Service as ServiceResource;
-use App\Service;
-use Illuminate\Http\Request;
 
-class ServiceController extends Controller
+use App\Customer;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Customer as CustomerResource;
+
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +16,10 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'services' => ServiceResource::collection(Service::all()),
-        ], 200);
+        //
+        $customers = Customer::where('is_client',0)->get();
+        return response()->json(CustomerResource::collection($customers));
+    
     }
 
     /**
@@ -38,14 +40,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required'],
-        ]);
-
-        Service::create($request->all());
-        return response()->json([
-            'Status' => 'Success',
-        ], 201);
+        //
     }
 
     /**
@@ -56,15 +51,20 @@ class ServiceController extends Controller
      */
     public function show($id)
     {
-        $service = Service::find($id);
-        if (!$service) {
+      
+
+        $customer = Customer::find($id);
+
+        if (!$customer) {
             return response()->json([
-                'Message' => 'Item Not Found'
+                'success' => false,
+                'message' => 'Sorry, customer with id ' . $id . ' cannot be found'
             ], 400);
         }
+       
         return response()->json([
             'success' => true,
-            'customer' => new ServiceResource($service),
+            'customer' => new CustomerResource($customer),
         ], 200);
     }
 
@@ -88,19 +88,22 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //
         $request->validate([
-            'name' => ['required'],
+            'name' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
         ]);
 
-        $service = Service::find($id);
-        if (is_null($service)) {
+        $customer = Customer::find($id);
+        if (is_null($customer)) {
             return response()->json([
                 'Not Found', 400
             ]);
         } else {
-            $service->update($request->all());
+            $customer->update($request->all());
             return response()->json([
-                'service' => ServiceResource::collection($service)
+                'updated_customer' => new CustomerResource($customer)
             ], 200);
         }
     }
@@ -113,11 +116,21 @@ class ServiceController extends Controller
      */
     public function destroy($id)
     {
-        $service = Service::find($id);
-        if (is_null($service)) {
+        //
+        $customer = Customer::find($id);
+        if (is_null($customer)) {
             return response()->json('Item Not Found', 404);
         }
-        $service->delete();
+        $customer->delete();
         return response()->json("Deleted Successfully!!", 200);
+    }
+
+
+    public function getAllClients()
+    {
+        //
+        $customers = Customer::where('is_client',1)->get();
+        return response()->json(CustomerResource::collection($customers));
+    
     }
 }
