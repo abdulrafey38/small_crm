@@ -56,7 +56,16 @@ class ServiceController extends Controller
      */
     public function show($id)
     {
-        //
+        $service = Service::find($id);
+        if (!$service) {
+            return response()->json([
+                'Message' => 'Item Not Found'
+            ], 400);
+        }
+        return response()->json([
+            'success' => true,
+            'service' => ServiceResource::collection($service)
+        ], 200);
     }
 
     /**
@@ -79,7 +88,21 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => ['required'],
+        ]);
+
+        $service = Service::find($id);
+        if (is_null($service)) {
+            return response()->json([
+                'Not Found', 400
+            ]);
+        } else {
+            $service->update($request->all());
+            return response()->json([
+                'service' => ServiceResource::collection($service)
+            ], 200);
+        }
     }
 
     /**

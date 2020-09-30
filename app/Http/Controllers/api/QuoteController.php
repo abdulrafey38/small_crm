@@ -139,8 +139,13 @@ class QuoteController extends Controller
         //pdf making from request
         //extracting email from id of customer
         //sending mail to customer email with pdf attachment
-
-        $pdf = PDF::loadView('pdf');
+        $name='Rafay';
+        $phone='1234567890';
+        $email='hello@gmail.com';
+        $price='1220';
+        $descreption='lorem epsidfs dfs df dasf ';
+        $service='UI/UX';
+        $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
         return $pdf->download('invoice.pdf');
 
 

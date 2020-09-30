@@ -42,7 +42,7 @@
                                 </h4>
                             </td>
                             <td class="text-right">
-                                <strong>{{ today()->format('d M') }}</strong>
+                                <strong>{{ today()->format('D d M Y') }}</strong>
                             </td>
                         </tr>
                     </table>
@@ -56,11 +56,11 @@
                             <div class="text-left">
                                 From
                                 <address>
-                                    <strong>Next Crm</strong><br>
+                                    <strong>Next CRM</strong><br>
                                     427/428 G4, M.A Johar Town Rd,<br>
                                     Block G4 Phase 2 Johar Town, Lahore, Punjab 54000<br>
                                     Email: nextcrm@nxb.com.pk<br>
-                                    Phone: +923354093240
+                                    Phone: +1234567890
                                 </address>
                             </div>
                         </td>
@@ -68,9 +68,9 @@
                             <div class="text-right">
                                 To
                                 <address>
-                                    <strong class="billing_name">Customer Name</strong><br>
-                                    Phone: +923354093240<br>
-                                    Email: customer@gmail.com
+                                    <strong class="billing_name">{{ $name }}</strong><br>
+                                    Phone: {{ $phone }}<br>
+                                    Email: {{ $email }}
                                 </address>
                             </div>
                         </td>
@@ -97,19 +97,19 @@
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>E-Commerce</td>
-                                <td>Some Message & Description</td>
-                                <td class="text-right"><strong>Bill&nbsp;1000</strong>/-</td>
+                                <td>{{ $service }}</td>
+                                <td> {{ $descreption }}</td>
+                                <td class="text-right"><strong>Bill&nbsp;{{ $price }}</strong>/-</td>
                             </tr>
 
                             <tr style="color: green;">
                                 <td colspan="3" class="text-right">Sub Total</td>
-                                <td class="text-right"><strong>1000</strong>/-</td>
+                                <td class="text-right"><strong>{{ $price }}</strong>/-</td>
                             </tr>
 
                             <tr style="color: red;">
                                 <td colspan="3" class="text-right">Total Payable</td>
-                                <td class="text-right"><strong>1000</strong>/-</td>
+                                <td class="text-right"><strong>{{ $price }}</strong>/-</td>
                             </tr>
 
                         </tbody>
