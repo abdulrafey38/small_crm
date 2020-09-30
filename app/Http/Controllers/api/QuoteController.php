@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
 use App\Customer;
 use App\Http\Resources\Quote as QuoteResource;
@@ -142,7 +142,7 @@ class QuoteController extends Controller
 
         $pdf = PDF::loadView('pdf');
         return $pdf->download('invoice.pdf');
-        
+
 
     }
 
