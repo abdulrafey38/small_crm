@@ -18,5 +18,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/pdf','QuoteController@responseSend');
+
+
+Route::post('login', 'api\ApiController@login');
 Route::resource('/quote','QuoteController');
 Route::resource('/service', 'ServiceController');
+
+
+Route::group(['middleware' => 'auth.jwt'], function () {
+
+    Route::get('logout', 'api\ApiController@logout');
+    Route::get('user', 'api\ApiController@getAuthUser');
+
+});
