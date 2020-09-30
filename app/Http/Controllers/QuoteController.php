@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Customer;
 use App\Quote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Http\Resources\Quote as QuoteResource;
+
 
 class QuoteController extends Controller
 {
@@ -16,7 +17,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -87,7 +88,9 @@ class QuoteController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json([
+            'Quote'=> QuoteResource::collection(Quote::where('customer_id',$id)->get())
+        ],200);
     }
 
     /**
