@@ -16,7 +16,7 @@ class Quote extends JsonResource
     {
         return [
             'id' => $this->id,
-            'service_id' => $this->service->id,
+            'service_id' => $this->service_id,
             'service' => $this->service->name,
             'message' => $this->message,
             'status' => $this->status,
