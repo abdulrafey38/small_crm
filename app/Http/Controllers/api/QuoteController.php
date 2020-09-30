@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\api;
+use App\Http\Controllers\Controller;
 use App\Customer;
+use App\Http\Resources\Quote as QuoteResource;
 use App\Quote;
 use Illuminate\Http\Request;
-use App\Http\Resources\Quote as QuoteResource;
+use PDF;
 
 
 class QuoteController extends Controller
@@ -89,8 +90,8 @@ class QuoteController extends Controller
     public function show($id)
     {
         return response()->json([
-            'Quote'=> QuoteResource::collection(Quote::where('customer_id',$id)->get())
-        ],200);
+            'Quote' => QuoteResource::collection(Quote::where('customer_id', $id)->get()),
+        ], 200);
     }
 
     /**
@@ -131,4 +132,18 @@ class QuoteController extends Controller
         $quote->delete();
         return response()->json("Deleted Successfully!!", 200);
     }
+//==============================================================================
+    public function responseSend()
+    {
+        //storing response in response table with customer id, Quote ID
+        //pdf making from request
+        //extracting email from id of customer
+        //sending mail to customer email with pdf attachment
+
+        $pdf = PDF::loadView('pdf');
+        return $pdf->download('invoice.pdf');
+
+
+    }
+
 }

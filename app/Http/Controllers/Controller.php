@@ -10,4 +10,10 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function approved()
+    {
+        //cutomer id
+        //orders mai chla jae final reponse
+    }
 }
