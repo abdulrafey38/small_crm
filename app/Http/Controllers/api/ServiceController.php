@@ -16,7 +16,7 @@ class ServiceController extends Controller
     public function index()
     {
         return response()->json([
-            'services' => ServiceResource::collection(Service::all()),
+            'services' => ServiceResource::collection(Service::all()->sortByDesc('created_at')),
         ], 200);
     }
 
@@ -116,7 +116,7 @@ class ServiceController extends Controller
     {
         $service = Service::find($id);
         if (is_null($service)) {
-            return response()->json('Item Not Found', 404);
+            return response()->json('Service Not Found', 404);
         }
         $service->delete();
         return response()->json("Deleted Successfully!!", 200);

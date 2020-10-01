@@ -19,7 +19,7 @@ class CustomerController extends Controller
         //
         $customers = Customer::where('is_client',0)->get();
         return response()->json([
-            'customers'=>CustomerResource::collection($customers)
+            'customers'=>CustomerResource::collection($customers->sortByDesc('created_at'))
             ,200]);
 
     }
@@ -121,7 +121,7 @@ class CustomerController extends Controller
         //
         $customer = Customer::find($id);
         if (is_null($customer)) {
-            return response()->json('Item Not Found', 404);
+            return response()->json('Customer Not Found', 404);
         }
         $customer->delete();
         return response()->json("Deleted Successfully!!", 200);
@@ -133,7 +133,7 @@ class CustomerController extends Controller
         //
         $customers = Customer::where('is_client',1)->get();
         return response()->json([
-            'clients'=>CustomerResource::collection($customers)
+            'clients'=>CustomerResource::collection($customers->sortByDesc('created_at'))
             ,200]);
 
     }

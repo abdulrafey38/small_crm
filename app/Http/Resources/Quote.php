@@ -20,6 +20,7 @@ class Quote extends JsonResource
             'service' => $this->service->name,
             'message' => $this->message,
             'status' => $this->status,
+            'isNew' => $this->is_new
         ];
 
         // return parent::toArray($request);

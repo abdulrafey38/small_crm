@@ -99,17 +99,22 @@
                                 <td>1</td>
                                 <td>{{ $service }}</td>
                                 <td> {{ $descreption }}</td>
-                                <td class="text-right"><strong>Bill&nbsp;{{ $price }}</strong>/-</td>
+                                <td class=""><strong>{{ $price }}</strong>/-</td>
                             </tr>
 
                             <tr style="color: green;">
                                 <td colspan="3" class="text-right">Sub Total</td>
-                                <td class="text-right"><strong>{{ $price }}</strong>/-</td>
+                                <td class=""><strong>{{ $price }}</strong>/-</td>
+                            </tr>
+
+                            <tr style="color: orange;">
+                                <td colspan="3" class="text-right">Tax 18%</td>
+                                <td class=""><strong>{{ $price * 0.18  }}</strong>/-</td>
                             </tr>
 
                             <tr style="color: red;">
                                 <td colspan="3" class="text-right">Total Payable</td>
-                                <td class="text-right"><strong>{{ $price }}</strong>/-</td>
+                                <td class=""><strong>{{ $price + ($price * 0.18) }}</strong>/-</td>
                             </tr>
 
                         </tbody>

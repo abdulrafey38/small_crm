@@ -18,8 +18,10 @@ class QuoteController extends Controller
      */
     public function index()
     {
-
-    }
+        return response()->json([
+            'quotes'=>QuoteResource::collection(Quote::all()->sortByDesc('created_at'))
+        ],200);
+        }
 
     /**
      * Show the form for creating a new resource.
