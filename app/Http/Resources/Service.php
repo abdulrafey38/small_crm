@@ -18,6 +18,7 @@ class Service extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'budget'=>$this->budget,
             'updated' => $this->updated_at->diffForHumans(),
         ];
         // return parent::toArray($request);

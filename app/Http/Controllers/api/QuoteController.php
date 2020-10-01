@@ -19,7 +19,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        
+
         return response()->json([
             'quotes'=>QuoteResource::collection(Quote::all()->sortByDesc('created_at'))
         ], 200);
@@ -142,17 +142,19 @@ class QuoteController extends Controller
         $quote->status='Negotiating';
         $quote->save();
         $customer = $quote->customer;
-        \error_log($customer);
+
         $name=$customer->name;
         $phone=$customer->phone;
         $email=$customer->email;
         $price=$request->price;
         $descreption=$request->descreption;
         $service=$request->service;
-        // $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
+        $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
         // return $pdf->download('invoice.pdf');
-        Mail::to($email)
-                ->send(new \App\Mail\quotePdf($name, $phone, $email, $price, $descreption, $service));
+        
+        $message = new \App\Mail\quotePdf( $name, $phone, $email, $price, $descreption, $service);
+        $message->attachData($pdf->output(),'invoice.pdf');
+        Mail::to($email)->send($message);
         return response()->json("sent response Successfully!!", 200);
     }
 

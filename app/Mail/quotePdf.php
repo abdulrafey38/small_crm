@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Jobs\sendmail;
 
-class quotePdf extends Mailable implements ShouldQueue
+class quotePdf extends Mailable
 {
 
 
@@ -24,14 +24,15 @@ class quotePdf extends Mailable implements ShouldQueue
      */
     public function __construct($name , $phone , $email , $price , $descreption ,$service)
     {
-        //
+
         $this->name=$name;
         $this->phone=$phone;
         $this->email=$email;
         $this->price=$price;
         $this->descreption=$descreption;
         $this->service=$service;
-        
+
+
     }
 
     /**
@@ -41,9 +42,10 @@ class quotePdf extends Mailable implements ShouldQueue
      */
     public function build()
     {
+
          return $this->view('pdf')->with('name','email','phone','descreption','service' , 'price')
-         ->subject('NextCRM Quote ');   
-       
-         
+         ->subject('NextCRM Quote ');
+
+
     }
 }

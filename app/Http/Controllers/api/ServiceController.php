@@ -42,7 +42,10 @@ class ServiceController extends Controller
             'name' => ['required','unique:services,name'],
         ]);
 
-        Service::create($request->all());
+        $service = new Service();
+        $service->name=$request->name;
+        $service->budget=$request->budget;
+        $service->save();
         return response()->json([
             'Status' => 'Success',
         ], 201);
@@ -88,11 +91,10 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        \error_log($request->name);
+        \error_log($request);
 
-        \error_log($id);
         $request->validate([
-            'name' => ['required'],
+            'name' => ['required','unique:services,name'],
         ]);
 
         $service = Service::find($id);
@@ -101,7 +103,10 @@ class ServiceController extends Controller
                 'Not Found', 400
             ]);
         } else {
-            $service->update($request->all());
+            $service->name= $request->name;
+            $service->budget= $request->budget;
+            $service->save();
+
             return response()->json(200);
         }
     }
