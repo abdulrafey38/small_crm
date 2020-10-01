@@ -18,7 +18,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -88,10 +88,9 @@ class QuoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+
     {
-        return response()->json([
-            'Quote' => QuoteResource::collection(Quote::where('customer_id', $id)->get()),
-        ], 200);
+
     }
 
     /**
@@ -133,22 +132,34 @@ class QuoteController extends Controller
         return response()->json("Deleted Successfully!!", 200);
     }
 //==============================================================================
-    public function responseSend()
+    public function responseSend(Request $request , $id)
     {
+
+
         //storing response in response table with customer id, Quote ID
         //pdf making from request
         //extracting email from id of customer
         //sending mail to customer email with pdf attachment
-        $name='Rafay';
-        $phone='1234567890';
-        $email='hello@gmail.com';
-        $price='1220';
-        $descreption='lorem epsidfs dfs df dasf ';
-        $service='UI/UX';
+        $quote = Quote::where('id',$id)->first();
+        $customer = $quote->customer;
+        \error_log($customer);
+        $name=$customer->name;
+        $phone=$customer->phone;
+        $email=$customer->email;
+        $price=$request->price;
+        $descreption=$request->description;
+        $service=$request->service;
         $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
         return $pdf->download('invoice.pdf');
 
 
+    }
+
+    public function customerQuotes($id){
+
+        return response()->json([
+            'quote' => QuoteResource::collection(Quote::where('customer_id', $id)->get()),
+        ], 200);
     }
 
 }
