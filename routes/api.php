@@ -23,6 +23,10 @@ Route::resource('quote','api\QuoteController');
 Route::resource('service', 'api\ServiceController');
 Route::resource('customer', 'api\CustomerController');
 Route::get('client', 'api\CustomerController@getAllClients');
+Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
+Route::post('response/{id}', 'api\QuoteController@responseSend');
+
+
 
 Route::group(['middleware' => 'auth.jwt'], function () {
 

@@ -39,7 +39,7 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required'],
+            'name' => ['required','unique:services,name'],
         ]);
 
         Service::create($request->all());
@@ -64,7 +64,7 @@ class ServiceController extends Controller
         }
         return response()->json([
             'success' => true,
-            'customer' => new ServiceResource($service),
+            'service' => new ServiceResource($service)
         ], 200);
     }
 
@@ -88,6 +88,9 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        \error_log($request->name);
+
+        \error_log($id);
         $request->validate([
             'name' => ['required'],
         ]);
@@ -99,9 +102,7 @@ class ServiceController extends Controller
             ]);
         } else {
             $service->update($request->all());
-            return response()->json([
-                'service' => ServiceResource::collection($service)
-            ], 200);
+            return response()->json(200);
         }
     }
 

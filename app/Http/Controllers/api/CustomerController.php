@@ -18,8 +18,10 @@ class CustomerController extends Controller
     {
         //
         $customers = Customer::where('is_client',0)->get();
-        return response()->json(CustomerResource::collection($customers));
-    
+        return response()->json([
+            'customers'=>CustomerResource::collection($customers)
+            ,200]);
+
     }
 
     /**
@@ -51,7 +53,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-      
+
 
         $customer = Customer::find($id);
 
@@ -61,7 +63,7 @@ class CustomerController extends Controller
                 'message' => 'Sorry, customer with id ' . $id . ' cannot be found'
             ], 400);
         }
-       
+
         return response()->json([
             'success' => true,
             'customer' => new CustomerResource($customer),
@@ -130,7 +132,9 @@ class CustomerController extends Controller
     {
         //
         $customers = Customer::where('is_client',1)->get();
-        return response()->json(CustomerResource::collection($customers));
-    
+        return response()->json([
+            'clients'=>CustomerResource::collection($customers)
+            ,200]);
+
     }
 }
