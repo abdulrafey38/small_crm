@@ -21,8 +21,8 @@ class QuoteController extends Controller
     {
         return response()->json([
             'quotes'=>QuoteResource::collection(Quote::all()->sortByDesc('created_at'))
-        ],200);
-        }
+        ], 200);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -61,7 +61,6 @@ class QuoteController extends Controller
             return response()->json([
                 'Status' => 'Quote Added, Customer Already Exists',
             ], 201);
-
         } else {
             //saving Customer
             $customer = new Customer();
@@ -80,7 +79,6 @@ class QuoteController extends Controller
             return response()->json([
                 'Status' => 'Customer Created & Quote Added',
             ], 201);
-
         }
     }
 
@@ -91,9 +89,7 @@ class QuoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-
     {
-
     }
 
     /**
@@ -134,14 +130,16 @@ class QuoteController extends Controller
         $quote->delete();
         return response()->json("Deleted Successfully!!", 200);
     }
-//==============================================================================
-    public function responseSend(Request $request , $id)
+    //==============================================================================
+    public function responseSend(Request $request, $id)
     {
         //storing response in response table with customer id, Quote ID
         //pdf making from request
         //extracting email from id of customer
         //sending mail to customer email with pdf attachment
-        $quote = Quote::where('id',$id)->first();
+        $quote = Quote::where('id', $id)->first();
+        $quote->status='Negotiating';
+        $quote->save();
         $customer = $quote->customer;
         \error_log($customer);
         $name=$customer->name;
@@ -153,17 +151,27 @@ class QuoteController extends Controller
         // $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
         // return $pdf->download('invoice.pdf');
         Mail::to($email)
-                ->send(new \App\Mail\quotePdf($name , $phone , $email , $price , $descreption ,$service));
+                ->send(new \App\Mail\quotePdf($name, $phone, $email, $price, $descreption, $service));
         return response()->json("sent response Successfully!!", 200);
-
-
     }
 
-    public function customerQuotes($id){
-
+    public function customerQuotes($id)
+    {
         return response()->json([
             'quote' => QuoteResource::collection(Quote::where('customer_id', $id)->get()),
         ], 200);
     }
+    //============================================================================================================
+    public function approving($id)
+    {
+        $quote = Quote::where('id',$id)->first();
+        $quote->status='Approved';
+        $quote->save();
+
+        $customer = $quote->customer;
+
+        $customer->is_client = 1;
+        $customer->save();
+}
 
 }

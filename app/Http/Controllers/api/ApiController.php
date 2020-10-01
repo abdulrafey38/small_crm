@@ -62,6 +62,7 @@ class ApiController extends Controller
         return response()->json([
             'success' => true,
             'token' => $jwt_token,
+            'expiry'=>'3600',
             'user' => auth()->user(),
         ]);
     }

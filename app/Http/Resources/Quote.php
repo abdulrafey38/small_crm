@@ -14,13 +14,17 @@ class Quote extends JsonResource
      */
     public function toArray($request)
     {
+
         return [
             'id' => $this->id,
             'service_id' => $this->service_id,
-            'service' => $this->service->name,
+            'service' => $this->service,
             'message' => $this->message,
             'status' => $this->status,
-            'isNew' => $this->is_new
+            'name' => $this->customer->name,
+            'phone' => $this->customer->phone,
+            'email' => $this->customer->email,
+            'isNew' => $this->is_new,
         ];
 
         // return parent::toArray($request);
