@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+Route::get('/sendmail', function () {
+
+    $users = auth()->user();
+    Mail::to($users)->send(new \App\Mail\Welcomenxb());
+    echo 'mail sent';
+});
