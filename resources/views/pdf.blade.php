@@ -68,7 +68,7 @@
                             <div class="text-right">
                                 To
                                 <address>
-                                    <strong class="billing_name">{{ $name }}</strong><br>
+                                <strong class="billing_name">{{$name}}</strong><br>
                                     Phone: {{ $phone }}<br>
                                     Email: {{ $email }}
                                 </address>

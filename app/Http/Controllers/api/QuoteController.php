@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\api;
-use App\Http\Controllers\Controller;
-use App\Customer;
-use App\Http\Resources\Quote as QuoteResource;
-use App\Quote;
-use Illuminate\Http\Request;
 use PDF;
+use App\Quote;
+use App\Customer;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Resources\Quote as QuoteResource;
 
 
 class QuoteController extends Controller
@@ -136,8 +137,6 @@ class QuoteController extends Controller
 //==============================================================================
     public function responseSend(Request $request , $id)
     {
-
-
         //storing response in response table with customer id, Quote ID
         //pdf making from request
         //extracting email from id of customer
@@ -149,10 +148,13 @@ class QuoteController extends Controller
         $phone=$customer->phone;
         $email=$customer->email;
         $price=$request->price;
-        $descreption=$request->description;
+        $descreption=$request->descreption;
         $service=$request->service;
-        $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
-        return $pdf->download('invoice.pdf');
+        // $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
+        // return $pdf->download('invoice.pdf');
+        Mail::to($email)
+                ->send(new \App\Mail\quotePdf($name , $phone , $email , $price , $descreption ,$service));
+        return response()->json("sent response Successfully!!", 200);
 
 
     }
