@@ -24,9 +24,11 @@ Route::resource('service', 'api\ServiceController');
 Route::resource('customer', 'api\CustomerController');
 
 
+
 Route::get('client', 'api\CustomerController@getAllClients');
 Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
 Route::post('response/{id}', 'api\QuoteController@responseSend');
+Route::post('readQuote/{id}','api\QuoteController@readQuote');
 
 
 

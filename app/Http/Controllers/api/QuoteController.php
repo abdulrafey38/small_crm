@@ -21,7 +21,7 @@ class QuoteController extends Controller
     {
 
         return response()->json([
-            'quotes'=>QuoteResource::collection(Quote::all()->sortByDesc('created_at'))
+            'quotes'=>QuoteResource::collection(Quote::all()->sortByDesc(['created_at','is_new']))
         ], 200);
     }
 
@@ -91,6 +91,9 @@ class QuoteController extends Controller
      */
     public function show($id)
     {
+        return response()->json([
+            'quote' => QuoteResource::collection(Quote::where('id', $id)->get()),
+        ], 200);
     }
 
     /**
@@ -151,7 +154,7 @@ class QuoteController extends Controller
         $service=$request->service;
         $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
         // return $pdf->download('invoice.pdf');
-        
+
         $message = new \App\Mail\quotePdf( $name, $phone, $email, $price, $descreption, $service);
         $message->attachData($pdf->output(),'invoice.pdf');
         Mail::to($email)->send($message);
@@ -175,6 +178,16 @@ class QuoteController extends Controller
 
         $customer->is_client = 1;
         $customer->save();
-}
+    }
+    //===========================================================================================================
+    public function readQuote(Request $request , $id)
+    {
+        $quote = Quote::where('id',$id)->first();
+        $quote->is_new = $request->isNew;
+        $quote->save();
+        return response()->json([
+            'success'
+        ],200);
+    }
 
 }
