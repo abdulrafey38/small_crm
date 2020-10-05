@@ -21,7 +21,7 @@ class QuoteController extends Controller
     {
 
         return response()->json([
-            'quotes'=>QuoteResource::collection(Quote::all()->sortByDesc(['created_at','is_new']))
+            'quotes'=>QuoteResource::collection(Quote::all()->sortBy('is_new')->sortByDesc('created_at'))
         ], 200);
     }
 
@@ -43,6 +43,7 @@ class QuoteController extends Controller
      */
     public function store(Request $request)
     {
+        \error_log($request);
         $request->validate([
             'name' => ['required'],
             'phone' => ['required'],
