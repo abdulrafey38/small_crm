@@ -40,6 +40,7 @@
                                 <h4>
                                     <span class="">Next CRM</span>
                                 </h4>
+
                             </td>
                             <td class="text-right">
                                 <strong>{{ today()->format('D d M Y') }}</strong>
@@ -80,6 +81,17 @@
                 <div>
                     --------------------------------------------------------------------------
                 </div>
+                <table>
+                    <tr>
+                        <td>
+                            <strong>Version </strong> :  {{ $revision }}
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    --------------------------------------------------------------------------
+                </div>
+
                 <!-- /.col -->
             </div>
             <br><br>
@@ -99,22 +111,27 @@
                                 <td>1</td>
                                 <td>{{ $service }}</td>
                                 <td> {{ $descreption }}</td>
-                                <td class=""><strong>{{ $price }}</strong>/-</td>
+                                <td class="text-right"><strong>{{ $price }}</strong>/-</td>
                             </tr>
 
                             <tr style="color: green;">
                                 <td colspan="3" class="text-right">Sub Total</td>
-                                <td class=""><strong>{{ $price }}</strong>/-</td>
+                                <td class="text-right"><strong>{{ $price }}</strong>/-</td>
+                            </tr>
+
+                            <tr style="color: darkgray;">
+                                <td colspan="3" class="text-right">Discount {{ $discount }}%</td>
+                                <td class="text-right"><strong>{{ $price  * ($discount / 100 ) }}</strong>/-</td>
                             </tr>
 
                             <tr style="color: orange;">
                                 <td colspan="3" class="text-right">Tax 18%</td>
-                                <td class=""><strong>{{ $price * 0.18  }}</strong>/-</td>
+                                <td class="text-right"><strong>{{ $price * 0.18  }}</strong>/-</td>
                             </tr>
 
                             <tr style="color: red;">
                                 <td colspan="3" class="text-right">Total Payable</td>
-                                <td class=""><strong>{{ $price + ($price * 0.18) }}</strong>/-</td>
+                                <td class="text-right"><strong>{{ $price + ($price * 0.18) - ($price * $discount / 100)}} </strong>/-</td>
                             </tr>
 
                         </tbody>

@@ -15,16 +15,17 @@ class quotePdf extends Mailable
 
     use Queueable, SerializesModels;
 
-    public   $name , $phone , $email , $price ,$descreption, $service ;
+    public $revision , $discount,  $name , $phone , $email , $price ,$descreption, $service ;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name , $phone , $email , $price , $descreption ,$service)
+    public function __construct($revision,$discount, $name , $phone , $email , $price , $descreption ,$service)
     {
-
+        $this->revision=$revision;
+        $this->discount= $discount;
         $this->name=$name;
         $this->phone=$phone;
         $this->email=$email;
@@ -43,7 +44,7 @@ class quotePdf extends Mailable
     public function build()
     {
 
-         return $this->view('pdf')->with('name','email','phone','descreption','service' , 'price')
+         return $this->view('pdf')->with('revision','discount','name','email','phone','descreption','service' , 'price')
          ->subject('NextCRM Quote ');
 
 

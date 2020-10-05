@@ -38,5 +38,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
     Route::post('response/{id}', 'api\QuoteController@responseSend');
     Route::post('readQuote/{id}', 'api\QuoteController@readQuote');
+    Route::post('approveQuote/{id}','api\QuoteController@approving');
 
 });

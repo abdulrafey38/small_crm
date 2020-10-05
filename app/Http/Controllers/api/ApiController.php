@@ -29,8 +29,8 @@ class ApiController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->phone = $request->phone;
-        $user->firstname = $request->firstName;
-        $user->lastname = $request->lastName;
+        $user->firstName = $request->firstName;
+        $user->lastName = $request->lastName;
         $user->address = $request->address;
         $user->country = $request->country;
         $user->city = $request->city;

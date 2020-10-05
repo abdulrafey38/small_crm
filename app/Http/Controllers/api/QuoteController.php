@@ -144,9 +144,11 @@ class QuoteController extends Controller
         //sending mail to customer email with pdf attachment
         $quote = Quote::where('id', $id)->first();
         $quote->status='Negotiating';
-        $quote->revision_no = $request->revision_no ;
+        $revision = $quote->revision_no = $quote->revision_no + 1 ;
         $quote->save();
         $customer = $quote->customer;
+
+        $discount = $request->discount;
 
         $name=$customer->name;
         $phone=$customer->phone;
@@ -154,10 +156,10 @@ class QuoteController extends Controller
         $price=$request->price;
         $descreption=$request->descreption;
         $service=$request->service;
-        $pdf = PDF::loadView('pdf',compact('name','phone','email','price','service','descreption'));
+        $pdf = PDF::loadView('pdf',compact('revision','discount','name','phone','email','price','service','descreption'));
         // return $pdf->download('invoice.pdf');
 
-        $message = new \App\Mail\quotePdf( $name, $phone, $email, $price, $descreption, $service);
+        $message = new \App\Mail\quotePdf( $revision , $discount, $name, $phone, $email, $price, $descreption, $service);
         $message->attachData($pdf->output(),'invoice.pdf');
         Mail::to($email)->send($message);
         return response()->json("sent response Successfully!!", 200);
@@ -170,16 +172,21 @@ class QuoteController extends Controller
         ], 200);
     }
     //============================================================================================================
-    public function approving($id)
+    public function approving(Request $request, $id)
     {
+        
         $quote = Quote::where('id',$id)->first();
         $quote->status='Approved';
         $quote->save();
 
         $customer = $quote->customer;
 
-        $customer->is_client = 1;
+        $customer->is_client = $request->is_client;
         $customer->save();
+
+        return response()->json([
+            'success'=>true
+        ],200);
     }
     //===========================================================================================================
     public function readQuote(Request $request , $id)
