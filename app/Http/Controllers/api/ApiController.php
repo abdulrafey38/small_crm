@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers\api;
 
-use JWTAuth;
-use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use App\User;
 use Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class ApiController extends Controller
 {
-
 
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'email'=>['unique:users,email'],
+            'email' => ['unique:users,email'],
             'password' => 'required',
             'name' => 'required',
         ]);
@@ -68,7 +66,7 @@ class ApiController extends Controller
         return response()->json([
             'success' => true,
             'token' => $jwt_token,
-            'expiry'=>'3600',
+            'expiry' => '3600',
             'user' => auth()->user(),
         ]);
     }
@@ -111,7 +109,6 @@ class ApiController extends Controller
             return response()->json(['Message' => 'Please provide the token']);
         }
     }
-
 
     public function update(Request $request)
     {

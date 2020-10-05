@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\api;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Service as ServiceResource;
 use App\Service;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Service as ServiceResource;
 
 class ServiceController extends Controller
 {
@@ -16,7 +17,7 @@ class ServiceController extends Controller
     public function index()
     {
         return response()->json([
-            'services' => ServiceResource::collection(Service::all()->sortByDesc('created_at')),
+            'services' => ServiceResource::collection(Service::all()->sortBy('name')->sortByDesc('created_at')),
         ], 200);
     }
 
@@ -91,13 +92,15 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        \error_log($request);
-
-        $request->validate([
-            'name' => ['required','unique:services,name'],
-        ]);
 
         $service = Service::find($id);
+
+        $request->validate([
+            'name' => ['required'],
+            'name'=> Rule::unique('services')->ignore($service->id),
+        ]);
+
+
         if (is_null($service)) {
             return response()->json([
                 'Not Found', 400
