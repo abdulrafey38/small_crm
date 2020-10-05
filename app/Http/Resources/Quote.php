@@ -25,6 +25,7 @@ class Quote extends JsonResource
             'phone' => $this->customer->phone,
             'email' => $this->customer->email,
             'isNew' => $this->is_new,
+            'revision_no' => $this->revision_no,
         ];
 
         // return parent::toArray($request);

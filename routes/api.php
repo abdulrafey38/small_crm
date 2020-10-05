@@ -12,29 +12,31 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
+
+Route::post('/register', 'api\ApiController@register');
+Route::post('login', 'api\ApiController@login');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('pdf','api\QuoteController@responseSend');
-Route::post('login', 'api\ApiController@login');
-Route::resource('quote','api\QuoteController');
-Route::resource('service', 'api\ServiceController');
-Route::resource('customer', 'api\CustomerController');
-
-
-
-Route::get('client', 'api\CustomerController@getAllClients');
-Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
-Route::post('response/{id}', 'api\QuoteController@responseSend');
-Route::post('readQuote/{id}','api\QuoteController@readQuote');
-
-
 
 Route::group(['middleware' => 'auth.jwt'], function () {
 
+    Route::post('/update', 'api\ApiController@update');
+
     Route::get('logout', 'api\ApiController@logout');
     Route::get('user', 'api\ApiController@getAuthUser');
+
+    Route::get('pdf', 'api\QuoteController@responseSend');
+
+    Route::resource('quote', 'api\QuoteController');
+    Route::resource('service', 'api\ServiceController');
+    Route::resource('customer', 'api\CustomerController');
+
+    Route::get('client', 'api\CustomerController@getAllClients');
+    Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
+    Route::post('response/{id}', 'api\QuoteController@responseSend');
+    Route::post('readQuote/{id}', 'api\QuoteController@readQuote');
 
 });

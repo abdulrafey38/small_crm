@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
+use JWTAuth;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Auth;
 
 class ApiController extends Controller
 {
-    public $loginAfterSignUp = true;
+
 
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
+            'email'=>['unique:users,email'],
             'password' => 'required',
             'name' => 'required',
         ]);
@@ -27,10 +30,13 @@ class ApiController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
+        $user->phone = $request->phone;
+        $user->firstname = $request->firstName;
+        $user->lastname = $request->lastName;
+        $user->address = $request->address;
+        $user->country = $request->country;
+        $user->city = $request->city;
         $user->save();
-        if ($this->loginAfterSignUp) {
-            return $this->login($request);
-        }
 
         return response()->json([
             'success' => true,
@@ -104,6 +110,30 @@ class ApiController extends Controller
         } else {
             return response()->json(['Message' => 'Please provide the token']);
         }
+    }
+
+
+    public function update(Request $request)
+    {
+        \error_log($request);
+        $user = Auth::user();
+
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->email = $user->email;
+        $user->password = $user->password;
+        $user->phone = $request->phone;
+        $user->firstname = $request->firstName;
+        $user->lastname = $request->lastName;
+        $user->address = $request->address;
+        $user->country = $request->country;
+        $user->city = $request->city;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'data' => $user,
+        ], 200);
     }
 
 }

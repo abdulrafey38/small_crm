@@ -48,7 +48,7 @@ class QuoteController extends Controller
             'name' => ['required'],
             'phone' => ['required'],
             'service_id' => ['required'],
-            'email' => ['required'],
+            'email' => ['required','unique:users,email'],
             'message' => ['required'],
 
         ]);
@@ -144,6 +144,7 @@ class QuoteController extends Controller
         //sending mail to customer email with pdf attachment
         $quote = Quote::where('id', $id)->first();
         $quote->status='Negotiating';
+        $quote->revision_no = $request->revision_no ;
         $quote->save();
         $customer = $quote->customer;
 
