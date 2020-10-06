@@ -13,11 +13,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
-
-Route::post('/register', 'api\ApiController@register');
 Route::post('login', 'api\ApiController@login');
-Route::get('/featuredServices', 'api\ServiceController@index');
+Route::post('/register', 'api\ApiController@register');
 Route::post('/quoteSubmit', 'api\QuoteController@store');
+Route::get('/featuredServices', 'api\ServiceController@index');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -25,18 +24,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth.jwt'], function () {
 
-    Route::post('/update', 'api\ApiController@update');
-    Route::get('logout', 'api\ApiController@logout');
-    Route::get('user', 'api\ApiController@getAuthUser');
-    Route::resource('service', 'api\ServiceController');
-    Route::get('pdf', 'api\QuoteController@responseSend');
     Route::resource('quote', 'api\QuoteController');
+    Route::get('logout', 'api\ApiController@logout');
+    Route::post('/update', 'api\ApiController@update');
+    Route::resource('service', 'api\ServiceController');
+    Route::get('user', 'api\ApiController@getAuthUser');
     Route::resource('customer', 'api\CustomerController');
+    Route::get('pdf', 'api\QuoteController@responseSend');
     Route::get('client', 'api\CustomerController@getAllClients');
-    Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
-    Route::post('response/{id}', 'api\QuoteController@responseSend');
     Route::post('readQuote/{id}', 'api\QuoteController@readQuote');
+    Route::post('response/{id}', 'api\QuoteController@responseSend');
     Route::post('approveQuote/{id}', 'api\QuoteController@approving');
-    Route::get('/getQuoteResponse', 'api\ResponseController@index');
+    Route::get('/getQuoteResponse/{id}', 'api\ResponseController@show');
+    Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
+    Route::get('approveQuote/', 'api\QuoteController@approvedQuotes');
 
 });

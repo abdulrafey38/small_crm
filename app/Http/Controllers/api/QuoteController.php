@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\api;
-use PDF;
-use App\Quote;
+
 use App\Customer;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Quote as QuoteResource;
+use App\Quote;
 use App\Response;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
-use App\Http\Resources\Quote as QuoteResource;
-
+use PDF;
 
 class QuoteController extends Controller
 {
@@ -22,9 +22,10 @@ class QuoteController extends Controller
     {
 
         return response()->json([
-            'quotes'=>QuoteResource::collection(Quote::all()->sortBy('is_new')->sortByDesc('created_at'))
+            'quotes' => QuoteResource::collection(Quote::all()->sortBy('is_new')->sortByDesc('created_at')),
         ], 200);
     }
+    //=========================================================================================
 
     /**
      * Show the form for creating a new resource.
@@ -35,6 +36,7 @@ class QuoteController extends Controller
     {
         //
     }
+    //=========================================================================================
 
     /**
      * Store a newly created resource in storage.
@@ -44,12 +46,12 @@ class QuoteController extends Controller
      */
     public function store(Request $request)
     {
-        \error_log($request);
+
         $request->validate([
             'name' => ['required'],
             'phone' => ['required'],
             'service_id' => ['required'],
-            'email' => ['required','unique:users,email'],
+            'email' => ['required', 'unique:users,email'],
             'message' => ['required'],
 
         ]);
@@ -84,6 +86,7 @@ class QuoteController extends Controller
             ], 201);
         }
     }
+    //=========================================================================================
 
     /**
      * Display the specified resource.
@@ -97,6 +100,7 @@ class QuoteController extends Controller
             'quote' => QuoteResource::collection(Quote::where('id', $id)->get()),
         ], 200);
     }
+    //=========================================================================================
 
     /**
      * Show the form for editing the specified resource.
@@ -108,6 +112,7 @@ class QuoteController extends Controller
     {
         //
     }
+    //=========================================================================================
 
     /**
      * Update the specified resource in storage.
@@ -120,7 +125,7 @@ class QuoteController extends Controller
     {
         //
     }
-
+    //=========================================================================================
     /**
      * Remove the specified resource from storage.
      *
@@ -136,7 +141,7 @@ class QuoteController extends Controller
         $quote->delete();
         return response()->json("Deleted Successfully!!", 200);
     }
-    //==============================================================================
+    //==========================================================================================
     public function responseSend(Request $request, $id)
     {
         //storing response in response table with customer id, Quote ID
@@ -144,24 +149,23 @@ class QuoteController extends Controller
         //extracting email from id of customer
         //sending mail to customer email with pdf attachment
         $quote = Quote::where('id', $id)->first();
-        $quote->status='Negotiating';
-        $revision = $quote->revision_no = $quote->revision_no + 1 ;
+        $quote->status = 'Negotiating';
+        $revision = $quote->revision_no = $quote->revision_no + 1;
         $quote->save();
         $customer = $quote->customer;
 
         $discount = $request->discount;
 
-        $name=$customer->name;
-        $phone=$customer->phone;
-        $email=$customer->email;
-        $price=$request->price;
-        $descreption=$request->descreption;
-        $service=$request->service;
-        $pdf = PDF::loadView('pdf',compact('revision','discount','name','phone','email','price','service','descreption'));
+        $name = $customer->name;
+        $phone = $customer->phone;
+        $email = $customer->email;
+        $price = $request->price;
+        $descreption = $request->descreption;
+        $service = $request->service;
+        $pdf = PDF::loadView('pdf', compact('revision', 'discount', 'name', 'phone', 'email', 'price', 'service', 'descreption'));
         // return $pdf->download('invoice.pdf');
 
-
-        $total_bill = $request->price + ($request->price * 0.18 ) - ($request->price * $discount / 100);
+        $total_bill = $request->price + ($request->price * 0.18) - ($request->price * $discount / 100);
 
         $response = new Response();
         $response->quote_id = $quote->id;
@@ -169,14 +173,13 @@ class QuoteController extends Controller
         $response->discount = $request->discount;
         $response->tax = 18;
         $response->sub_total = $request->price;
-        $response->total_bill =$total_bill;
+        $response->total_bill = $total_bill;
         $response->revision_no = $revision;
         $response->service_name = $request->service;
         $response->save();
 
-
-        $message = new \App\Mail\quotePdf( $revision , $discount, $name, $phone, $email, $price, $descreption, $service);
-        $message->attachData($pdf->output(),'invoice.pdf');
+        $message = new \App\Mail\quotePdf($revision, $discount, $name, $phone, $email, $price, $descreption, $service);
+        $message->attachData($pdf->output(), 'invoice.pdf');
         Mail::to($email)->send($message);
         return response()->json("sent response Successfully!!", 200);
     }
@@ -191,8 +194,8 @@ class QuoteController extends Controller
     public function approving(Request $request, $id)
     {
 
-        $quote = Quote::where('id',$id)->first();
-        $quote->status='Approved';
+        $quote = Quote::where('id', $id)->first();
+        $quote->status = 'Approved';
         $quote->save();
 
         $customer = $quote->customer;
@@ -201,18 +204,25 @@ class QuoteController extends Controller
         $customer->save();
 
         return response()->json([
-            'success'=>true
-        ],200);
+            'success' => true,
+        ], 200);
     }
     //===========================================================================================================
-    public function readQuote(Request $request , $id)
+    public function readQuote(Request $request, $id)
     {
-        $quote = Quote::where('id',$id)->first();
+        $quote = Quote::where('id', $id)->first();
         $quote->is_new = $request->isNew;
         $quote->save();
         return response()->json([
-            'success'
-        ],200);
+            'success',
+        ], 200);
+    }
+    //========================================================================================================
+    public function approvedQuotes()
+    {
+        return response()->json([
+            'approvesQuotes' => QuoteResource::collection(Quote::all()->where('status', 'Approved')->sortBy('is_new')->sortByDesc('created_at')),
+        ], 200);
     }
 
 }
