@@ -26,20 +26,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => 'auth.jwt'], function () {
 
     Route::post('/update', 'api\ApiController@update');
-
     Route::get('logout', 'api\ApiController@logout');
     Route::get('user', 'api\ApiController@getAuthUser');
     Route::resource('service', 'api\ServiceController');
-
     Route::get('pdf', 'api\QuoteController@responseSend');
-
     Route::resource('quote', 'api\QuoteController');
     Route::resource('customer', 'api\CustomerController');
-
     Route::get('client', 'api\CustomerController@getAllClients');
     Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
     Route::post('response/{id}', 'api\QuoteController@responseSend');
     Route::post('readQuote/{id}', 'api\QuoteController@readQuote');
     Route::post('approveQuote/{id}', 'api\QuoteController@approving');
+    Route::get('/getQuoteResponse', 'api\ResponseController@index');
 
 });
