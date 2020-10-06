@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 use PDF;
 use App\Quote;
 use App\Customer;
+use App\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -159,6 +160,21 @@ class QuoteController extends Controller
         $pdf = PDF::loadView('pdf',compact('revision','discount','name','phone','email','price','service','descreption'));
         // return $pdf->download('invoice.pdf');
 
+
+        $total_bill = $request->price + ($request->price * 0.18 ) - ($request->price * $discount / 100);
+
+        $response = new Response();
+        $response->quote_id = $quote->id;
+        $response->description = $request->descreption;
+        $response->discount = $request->discount;
+        $response->tax = 18;
+        $response->sub_total = $request->price;
+        $response->total_bill =$total_bill;
+        $response->revision_no = $revision;
+        $response->service_name = $request->service;
+        $response->save();
+
+
         $message = new \App\Mail\quotePdf( $revision , $discount, $name, $phone, $email, $price, $descreption, $service);
         $message->attachData($pdf->output(),'invoice.pdf');
         Mail::to($email)->send($message);
@@ -174,7 +190,7 @@ class QuoteController extends Controller
     //============================================================================================================
     public function approving(Request $request, $id)
     {
-        
+
         $quote = Quote::where('id',$id)->first();
         $quote->status='Approved';
         $quote->save();
