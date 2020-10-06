@@ -15,6 +15,14 @@ class CreateResponsesTable extends Migration
     {
         Schema::create('responses', function (Blueprint $table) {
             $table->id();
+            $table->integer('quote_id');
+            $table->string('description');
+            $table->integer('discount');
+            $table->integer('tax');
+            $table->integer('sub_total');
+            $table->integer('total_bill');
+            $table->integer('revision_no');
+            $table->string('service_name');
             $table->timestamps();
         });
     }
