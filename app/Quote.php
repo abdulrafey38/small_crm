@@ -19,6 +19,9 @@ class Quote extends Model
         return $this->belongsTo('App\Service');
     }
 
-  
+    public function responses()
+    {
+        return $this->hasMany('App\Response');
+    }
 
 }
