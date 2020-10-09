@@ -100,10 +100,10 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                             <tr>
-                                <th>Id</th>
+                                <th>Sr.</th>
                                 <th>Service</th>
                                 <th>Description</th>
-                                <th>Price</th>
+                                <th>Price($)</th>
                             </tr>
                         </thead>
                         <tbody>

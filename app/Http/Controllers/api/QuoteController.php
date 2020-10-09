@@ -149,9 +149,7 @@ class QuoteController extends Controller
         //extracting email from id of customer
         //sending mail to customer email with pdf attachment
         $quote = Quote::where('id', $id)->first();
-        $quote->status = 'Negotiating';
-        $revision = $quote->revision_no = $quote->revision_no + 1;
-        $quote->save();
+
         $customer = $quote->customer;
 
         $discount = $request->discount;
@@ -162,10 +160,16 @@ class QuoteController extends Controller
         $price = $request->price;
         $descreption = $request->descreption;
         $service = $request->service;
+        $quote->status = 'Negotiating';
+        $revision = $quote->revision_no = $quote->revision_no + 1;
         $pdf = PDF::loadView('pdf', compact('revision', 'discount', 'name', 'phone', 'email', 'price', 'service', 'descreption'));
         // return $pdf->download('invoice.pdf');
 
         $total_bill = $request->price + ($request->price * 0.18) - ($request->price * $discount / 100);
+
+        $message = new \App\Mail\quotePdf($revision, $discount, $name, $phone, $email, $price, $descreption, $service);
+        $message->attachData($pdf->output(), 'invoice.pdf');
+        Mail::to($email)->send($message);
 
         $response = new Response();
         $response->quote_id = $quote->id;
@@ -177,10 +181,9 @@ class QuoteController extends Controller
         $response->revision_no = $revision;
         $response->service_name = $request->service;
         $response->save();
+        $quote->save();
 
-        $message = new \App\Mail\quotePdf($revision, $discount, $name, $phone, $email, $price, $descreption, $service);
-        $message->attachData($pdf->output(), 'invoice.pdf');
-        Mail::to($email)->send($message);
+
         return response()->json("sent response Successfully!!", 200);
     }
 
@@ -221,7 +224,7 @@ class QuoteController extends Controller
     public function approvedQuotes()
     {
         return response()->json([
-            'approvesQuotes' => QuoteResource::collection(Quote::all()->where('status', 'Approved')->sortBy('is_new')->sortByDesc('created_at')),
+            'quotes' => QuoteResource::collection(Quote::all()->where('status', 'Approved')->sortBy('is_new')->sortByDesc('created_at')),
         ], 200);
     }
 
