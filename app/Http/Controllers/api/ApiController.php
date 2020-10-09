@@ -112,7 +112,7 @@ class ApiController extends Controller
 
     public function update(Request $request)
     {
-        \error_log($request);
+        // \error_log($request);
         $user = Auth::user();
 
         $user = Auth::user();
