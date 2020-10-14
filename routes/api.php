@@ -29,7 +29,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/update', 'api\ApiController@update');
     Route::resource('service', 'api\ServiceController');
     Route::get('user', 'api\ApiController@getAuthUser');
-    Route::resource('customer', 'api\CustomerController');
     Route::get('pdf', 'api\QuoteController@responseSend');
     Route::get('client', 'api\CustomerController@getAllClients');
     Route::post('readQuote/{id}', 'api\QuoteController@readQuote');
@@ -40,3 +39,4 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('customerQuote/{id}', 'api\QuoteController@customerQuotes');
 
 });
+Route::resource('customer', 'api\CustomerController');

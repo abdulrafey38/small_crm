@@ -14,7 +14,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index():\Illuminate\Http\JsonResponse
     {
         //
         $customers = Customer::where('is_client',0)->get();
@@ -51,7 +51,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id):\Illuminate\Http\JsonResponse
     {
 
 
@@ -88,7 +88,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id):\Illuminate\Http\JsonResponse
     {
         //
         $request->validate([
@@ -116,7 +116,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id):\Illuminate\Http\JsonResponse
     {
         //
         $customer = Customer::find($id);
@@ -128,7 +128,7 @@ class CustomerController extends Controller
     }
 
 
-    public function getAllClients()
+    public function getAllClients():\Illuminate\Http\JsonResponse
     {
         //
         $customers = Customer::where('is_client',1)->get();
